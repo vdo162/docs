@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Example</title>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+	<div id="time"></div>
+	<script type="text/babel">
+		const time = () => {
+			const element = new Date().toLocaleTimeString();
+			ReactDOM.render(
+				element,
+				document.getElementById('time')
+			);	
+		}
+		time();
+		setInterval(time, 1000);
+    </script>
+	<div id="geo"></div>
+	<script type="text/babel">
+		var options = {
+		  enableHighAccuracy: true,
+		  timeout: 5000,
+		  maximumAge: 0
+		};
+
+		function success(pos) {
+		  var crd = pos.coords;
+		  const element = `Широта ${crd.latitude}. Долгота ${crd.longitude}`;
+			ReactDOM.render(
+				element,
+				document.getElementById('geo')
+			);
+		};
+
+		function error(err) {
+		  console.warn(`ERROR(${err.code}): ${err.message}`);
+		};
+
+		navigator.geolocation.getCurrentPosition(success, error, options);
+		
+    </script>
+    <div id="root"></div>
+    <script type="text/babel">
+		const Hello = () => {
+			const formatName = (user) => {
+				return user.firstName + ' ' + user.lastName;
+			}
+			const getGreeting = (user) => {
+				if (user) {
+					return <h2>Hello, {formatName(user)}!</h2>;
+				} else {
+					return <h2>Hello, unknown!</h2>;
+				}	
+			}
+			let user;
+			user = {
+				firstName: 'Nick',
+				lastName: 'Bond'
+			};
+			const element = getGreeting(user);
+			return (<div>
+				{element}
+			</div>)
+		}
+		
+		const container = (Example, numberOfExample) => {
+			return (<div className="blockOfExample">
+				<h1>Example #{numberOfExample}</h1>
+				<div className="example">
+					<Example/>
+				</div>
+			</div>)
+		}
+		const Docs = () => {
+			return (
+				<div>
+					<h1>Examples from docs</h1>
+					{container(Hello, 1)}
+				</div>
+			)
+		}
+		ReactDOM.render(
+			<Docs/>,
+			document.getElementById('root')
+		);
+		
+    </script>
+    <!--
+      Note: this page is a great way to try React but it's not suitable for production.
+      It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+      Read this section for a production-ready setup with JSX:
+      https://reactjs.org/docs/add-react-to-a-website.html#add-jsx-to-a-project
+
+      In a larger project, you can use an integrated toolchain that includes JSX instead:
+      https://reactjs.org/docs/create-a-new-react-app.html
+
+      You can also use React without JSX, in which case you can remove Babel:
+      https://reactjs.org/docs/react-without-jsx.html
+    -->
+  </body>
+</html>

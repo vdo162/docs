@@ -1,0 +1,13 @@
+h1 {
+	text-align: center;
+}
+.blockOfExample {
+	margin-bottom: 10px;
+	background: #f8f9fa;
+}
+.blockOfExample h1{
+	color: #0dcaf0;
+}
+.example{
+	border: solid 2px #0dcaf0;
+}
