@@ -43,12 +43,25 @@
 		function error(err) {
 		  console.warn(`ERROR(${err.code}): ${err.message}`);
 		};
-
-		navigator.geolocation.getCurrentPosition(success, error, options);
 		
+		const Geo = () => {
+			const getGeo = () => {
+				navigator.geolocation.getCurrentPosition(success, error, options);
+			}
+			return (
+				<div>
+					<button onClick = {getGeo} className='buttonGeo'>Do you want to know your geolocation?</button>
+				</div>
+			);
+		}
+		ReactDOM.render(
+			<Geo />,
+			document.getElementById('geo')
+		);
     </script>
     <div id="root"></div>
     <script type="text/babel">
+	//1
 		const Hello = () => {
 			const formatName = (user) => {
 				return user.firstName + ' ' + user.lastName;
@@ -66,11 +79,157 @@
 				lastName: 'Bond'
 			};
 			const element = getGreeting(user);
-			return (<div>
-				{element}
-			</div>)
+			return (
+				<div>
+					<div>
+						introducing JSX
+					</div>
+					{element}
+				</div>
+			)
 		}
-		
+	//2
+		const Welcome = (props) => {
+			return <h2>Welcome, {props.name}</h2>;
+		}
+		const WelcomeApp = () => {
+			return (
+				<div>
+					<div>
+						components and props
+					</div>
+					<Welcome name='Mike' />
+					<Welcome name='Nick' />
+					<Welcome name='Ann' />
+				</div>
+			);
+		}
+	//3
+		const FormattedDate = (props) => {
+			return <h2>Now {props.date.toLocaleTimeString()}.</h2>
+		}
+		class Clock extends React.Component {
+			constructor (props) {
+				super(props);
+				this.state = {date: new Date()};
+			}
+			
+			componentDidMount() {
+				this.timerId = setInterval(
+					() => this.tick(), 
+					1000);
+			}
+
+			componentWillUnmount() {
+				clearInterval(this.timeId);
+			}
+			
+			tick() {
+				this.setState({
+					date: new Date()
+				});
+			}
+			render () {
+				return(
+					<div>
+						state and lifecycle
+						<h2>Hello, word!</h2>
+						<FormattedDate date={this.state.date}/>
+					</div>
+				);
+			}
+		}
+	//4 
+		class Toggle extends React.Component {
+			constructor(props){
+				super(props);
+				this.state = {isToggleOn: true};
+				this.handlClickBindedInConstructor = this.handlClickBindedInConstructor.bind(this);
+			}
+			handlClickBindedInConstructor() {
+				this.setState(
+					state => ({
+						isToggleOn: !state.isToggleOn
+					})
+				);
+			}
+			handlClickBindedInonClick() {
+				this.setState(
+					state => ({
+						isToggleOn: !state.isToggleOn
+					})
+				);
+			}
+			handlClickWithArrowFunctions() {
+				this.setState(
+					state => ({
+						isToggleOn: !state.isToggleOn
+					})
+				);
+			}
+			handlClickAsArrowFunctions = () => {
+				this.setState(
+					state => ({
+						isToggleOn: !state.isToggleOn
+					})
+				);
+			}
+			render() {
+				return (
+					<div>
+						<div>handle of click with binded 'this'</div>
+						<button onClick = {this.handlClickBindedInConstructor}>
+							{this.state.isToggleOn ? 'On' : 'Off'}
+						</button>
+						<button onClick = {this.handlClickBindedInonClick.bind(this)}>
+							{this.state.isToggleOn ? 'On' : 'Off'}
+						</button>
+						<button onClick = {() => this.handlClickWithArrowFunctions()}>
+							{this.state.isToggleOn ? 'On' : 'Off'}
+						</button>
+						<button onClick = {this.handlClickAsArrowFunctions}>
+							{this.state.isToggleOn ? 'On' : 'Off'}
+						</button>
+					</div>
+				)
+			}
+		}
+	//5
+		class LoginButton extends React.Component {
+			handleClickAsCallback(e) {
+				console.log('Value of this:', this);
+				console.log('In callback always first argument is event:', e);
+			}
+			handleClickWithParam(id, e) {
+				console.log('Value of this:', this);
+				console.log('First param, example id:', id);
+				console.log('Second param, example event:', e);
+			}
+			handleClickWithBind(id, name, e) {
+				console.log('Value of this:', this);
+				console.log('First param, example id:', id);
+				console.log('Second param, example name:', name);
+				console.log('After all params follow event:', e);
+			}
+			render () {
+				return (
+					<div>
+						<div>handle of click with params and handling events</div>
+						<button onClick = {this.handleClickAsCallback}>
+							Click me
+						</button>
+						<button onClick = {(e) => this.handleClickWithParam(123, e)}>
+							Click me
+						</button>
+						<button onClick = {this.handleClickWithBind.bind(this, 123, 'Nick')}>
+							Click me
+						</button>
+					</div>
+				)
+			}
+		}
+	/////////////////////////////////////////////////////////	
+	//HOC	
 		const container = (Example, numberOfExample) => {
 			return (<div className="blockOfExample">
 				<h1>Example #{numberOfExample}</h1>
@@ -79,16 +238,21 @@
 				</div>
 			</div>)
 		}
-		const Docs = () => {
+	//main conponent
+		const App = () => {
 			return (
 				<div>
 					<h1>Examples from docs</h1>
 					{container(Hello, 1)}
+					{container(WelcomeApp, 2)}
+					{container(Clock, 3)}
+					{container(Toggle, 4)}
+					{container(LoginButton, 5)}
 				</div>
 			)
 		}
 		ReactDOM.render(
-			<Docs/>,
+			<App/>,
 			document.getElementById('root')
 		);
 		

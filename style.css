@@ -11,3 +11,7 @@ h1 {
 .example{
 	border: solid 2px #0dcaf0;
 }
+.buttonGeo{
+	background: none;
+	border: none;
+}
