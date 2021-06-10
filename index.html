@@ -84,6 +84,7 @@
 					<div>
 						introducing JSX
 					</div>
+					<hr/>
 					{element}
 				</div>
 			)
@@ -98,6 +99,7 @@
 					<div>
 						components and props
 					</div>
+					<hr/>
 					<Welcome name='Mike' />
 					<Welcome name='Nick' />
 					<Welcome name='Ann' />
@@ -133,6 +135,7 @@
 				return(
 					<div>
 						state and lifecycle
+						<hr/>
 						<h2>Hello, word!</h2>
 						<FormattedDate date={this.state.date}/>
 					</div>
@@ -153,7 +156,7 @@
 					})
 				);
 			}
-			handlClickBindedInonClick() {
+			handlClickBindedInOnClick() {
 				this.setState(
 					state => ({
 						isToggleOn: !state.isToggleOn
@@ -178,10 +181,11 @@
 				return (
 					<div>
 						<div>handle of click with binded 'this'</div>
+						<hr/>
 						<button onClick = {this.handlClickBindedInConstructor}>
 							{this.state.isToggleOn ? 'On' : 'Off'}
 						</button>
-						<button onClick = {this.handlClickBindedInonClick.bind(this)}>
+						<button onClick = {this.handlClickBindedInOnClick.bind(this)}>
 							{this.state.isToggleOn ? 'On' : 'Off'}
 						</button>
 						<button onClick = {() => this.handlClickWithArrowFunctions()}>
@@ -214,7 +218,8 @@
 			render () {
 				return (
 					<div>
-						<div>handle of click with params and handling events</div>
+						<div>handle of click with params and handling events (to see in Console ->)</div>
+						<hr/>
 						<button onClick = {this.handleClickAsCallback}>
 							Click me
 						</button>
@@ -228,6 +233,76 @@
 				)
 			}
 		}
+	//6
+		function LogInButton(props) {
+			return (
+				<button onClick={props.onClick}>
+					Login
+				</button>
+			);
+		}
+		
+		function LogOutButton(props) {
+			return (
+				<button onClick={props.onClick}>
+					Logout
+				</button>
+			);
+		}
+		
+		function UserGreeting (props) {
+			return <h2>Welcome back!</h2>;
+		}
+		
+		function GuestGreeting (props) {
+			return <h2>Come in, please.</h2>;
+		}
+		
+		function Greeting (props) {
+			const isLoggedIn = props.isLoggedIn
+			if (isLoggedIn) {
+				return <UserGreeting/>;
+			} 
+			return <GuestGreeting/>;	
+		}
+		
+		class LoginControl extends React.Component{
+			constructor(props) {
+				super(props);
+				this.handleLoginClick = this.handleLoginClick.bind(this);
+				this.handleLogoutClick  = this.handleLogoutClick .bind(this);
+				this.state = {isLoggedIn: false};
+			}
+			
+			handleLoginClick () {
+				this.setState({isLoggedIn: true});
+			}
+			
+			handleLogoutClick () {
+				this.setState({isLoggedIn: false});
+			}
+			
+			render() {
+				const isLoggedIn = this.state.isLoggedIn;
+				let button;
+				if (isLoggedIn) {
+					button = <LogOutButton onClick={this.handleLogoutClick}/>;
+				} else {
+					button = <LogInButton onClick={this.handleLoginClick}/>;
+				}
+				return (
+					<div>
+						<div>to render of elements by condition</div>
+						<hr/>
+						<div>Status: User is <b>{isLoggedIn ? '': 'not'} online</b> now.</div>
+						<Greeting isLoggedIn={isLoggedIn}/>
+						{button}
+					</div>
+				);
+			}
+		}
+	//7
+		
 	/////////////////////////////////////////////////////////	
 	//HOC	
 		const container = (Example, numberOfExample) => {
@@ -248,6 +323,7 @@
 					{container(Clock, 3)}
 					{container(Toggle, 4)}
 					{container(LoginButton, 5)}
+					{container(LoginControl, 6)}
 				</div>
 			)
 		}
