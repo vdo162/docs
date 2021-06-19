@@ -550,6 +550,72 @@
 		function toFahrenheit(celsius) {
 			return (celsius * 9 / 5) + 32;
 		}
+	//12
+		function FancyBorder(props) {
+			return (
+				<div className={'FancyBorder FancyBorder-' + props.color}>
+					{props.children}
+					{props.go}
+				</div>
+			);
+		}
+		
+		function Dialog(props) {
+			return (
+				<div>
+					<div>Composition instead Inheritance</div>
+					<hr/>
+					<FancyBorder color='blue' go={<div>Lets Go!</div>}>
+						<h2 className="Dialog-title">
+							{props.title}
+						</h2>
+						<p className="Dialog-message">
+							{props.message}
+						</p>
+						{props.children}
+					</FancyBorder>
+				</div>
+			);
+		}
+		
+		class SignUpDialog extends React.Component {
+			constructor(props) {
+				super(props);	
+				this.handleChange = this.handleChange.bind(this);
+				this.handleSignUp = this.handleSignUp.bind(this);
+				this.state = {login: ''}
+			}
+			
+			handleSignUp() {
+				alert(`Welcome aboard, ${this.state.login}!`);
+			}
+			
+			handleChange(e) {
+				this.setState({login: e.target.value});
+			}
+			render() {
+				return (
+					<Dialog 
+					  title='Mars Exploration Program' 
+					  message='How should we refer to you?'>
+					    <input value={this.state.login} onChange={this.handleChange}/>
+						<button onClick={this.handleSignUp}>Sign me up!</button>
+					</Dialog>
+				);
+			}	
+		}
+	//13
+		class FilterableProductTable extends React.Component {
+			render() {
+				return (
+					<div>
+						<div>React's philosophy</div>
+						<hr/>
+						start
+					</div>
+				);
+			}
+		}
 	/////////////////////////////////////////////////////////	
 	//HOC	
 		const container = (Example, numberOfExample) => {
@@ -576,6 +642,8 @@
 					{container(FlaworForm, 9)}
 					{container(Reservation, 10)}
 					{container(Calculator, 11)}
+					{container(SignUpDialog, 12)}
+					{container(FilterableProductTable, 13)}
 				</div>
 			)
 		}

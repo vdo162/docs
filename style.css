@@ -20,3 +20,32 @@ h1 {
 .row {
 	display: flex
 }
+
+.FancyBorder {
+  padding: 10px 10px;
+  border: 10px solid;
+}
+
+.FancyBorder-blue {
+  border-color: blue;
+}
+
+.mainFilterable {
+  min-height: 340px;
+}
+
+.search {
+  margin-bottom: 10px;
+}
+
+.checkbox {
+  margin-left: -4px;
+}
+
+.tab {
+  line-height: 150%;
+}
+
+.noStocked {
+  color: red;
+}
