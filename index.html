@@ -566,10 +566,10 @@
 					<div>Composition instead Inheritance</div>
 					<hr/>
 					<FancyBorder color='blue' go={<div>Lets Go!</div>}>
-						<h2 className="Dialog-title">
+						<h2>
 							{props.title}
 						</h2>
-						<p className="Dialog-message">
+						<p>
 							{props.message}
 						</p>
 						{props.children}
@@ -605,17 +605,141 @@
 			}	
 		}
 	//13
+		function ProductCategoryRow(props) {
+			return (
+				<tr>
+					<th colSpan="2">{props.category}</th>
+				</tr>
+			);
+		}
+		
+		function ProductRow(props) {
+			return (
+				<tr>
+					<td  className={props.product.stocked ? '' : 'noStocked'}>{props.product.name}</td>
+					<td>{props.product.price}</td>
+				</tr>
+			);
+		}
+		
+		function SearchBar(props) {
+			return (
+				<div className='search'>
+					<div>
+						<input 
+							value={props.search} 
+							placeholder='Search...'
+							onChange={props.handlesSearch}/>
+					</div>
+					<div className='checkbox'>
+						<input 
+							type='checkbox' 
+							checked={props.showOnlyStocked} 
+							onChange={props.handleshowOnlyStocked}/>
+						Only show products in stock
+					</div>
+				</div>
+			);
+		}
+		
+		function ProductTable(props) {
+			const  products = props.products.filter((product) => {
+				if(product.name.indexOf(props.search) !== -1) {
+					return(true);
+				}
+				return(false);
+			});
+			let categories = [];
+			let rows = [];
+			
+			if (products.length !== 0) {
+				categories[0] = products[0].category;
+				for (let i = 0; i < products.length; i++) {
+					if( categories.indexOf(products[i].category) === -1 ){
+						categories.push(products[i].category);
+					}
+				}
+				
+				for (let j = 0; j < categories.length; j++) {
+					rows.push(<ProductCategoryRow key={categories[j]} category={categories[j]}/>);
+					for (let i = 0; i < products.length; i++) {
+						if((products[i].category === categories[j])&&
+						   (!props.showOnlyStocked || products[i].stocked)
+						){
+							rows.push(<ProductRow key={products[i].name} product={products[i]}/>);
+						}
+					}
+				}
+			}
+			return (
+				<table className='tab'>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Prise</th>
+						</tr>
+					</thead>
+					<tbody>
+						{rows}
+					</tbody>
+				</table>
+			);
+		}
+		
 		class FilterableProductTable extends React.Component {
+			constructor(props) {
+				super(props);
+				this.handleshowOnlyStocked = this.handleshowOnlyStocked.bind(this);
+				this.handlesSearch = this.handlesSearch.bind(this);
+				this.state = {
+					showOnlyStocked: false,
+					search: ''
+				};
+			} 
+			
+			handleshowOnlyStocked() {
+				this.setState({showOnlyStocked: !this.state.showOnlyStocked});
+			} 
+			
+			handlesSearch(e) {
+				this.setState({search: e.target.value});
+			}
 			render() {
 				return (
 					<div>
-						<div>React's philosophy</div>
-						<hr/>
-						start
+						<SearchBar 
+							showOnlyStocked={this.state.showOnlyStocked} handleshowOnlyStocked={this.handleshowOnlyStocked}
+							search={this.state.search}
+							handlesSearch={this.handlesSearch}/>
+						<ProductTable 
+							products={this.props.products}
+							showOnlyStocked={this.state.showOnlyStocked}
+							search={this.state.search}/>
 					</div>
 				);
 			}
 		}
+		
+		class MainFilterable extends React.Component {
+			render() {
+				return (
+					<div className='mainFilterable'>
+						<div>React's philosophy</div>
+						<hr/>
+						<FilterableProductTable products={PRODUCTS}/>
+					</div>
+				);
+			}
+		}
+		
+		const PRODUCTS = [
+		  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+		  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+		  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+		  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+		  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+		  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+		];
 	/////////////////////////////////////////////////////////	
 	//HOC	
 		const container = (Example, numberOfExample) => {
@@ -643,7 +767,7 @@
 					{container(Reservation, 10)}
 					{container(Calculator, 11)}
 					{container(SignUpDialog, 12)}
-					{container(FilterableProductTable, 13)}
+					{container(MainFilterable, 13)}
 				</div>
 			)
 		}
