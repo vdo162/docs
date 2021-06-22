@@ -740,6 +740,96 @@
 		  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
 		  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
 		];
+	//14
+		function ClicksWithHookUseState() {
+			const [count, setCount] = React.useState(0);
+			return (
+				<div>
+					<div>Hook useState</div>
+					<hr/>
+					<p>You clicked {count} times</p>
+					<button onClick={() => setCount(count+1)}>Click</button>
+				</div>
+			);
+		}
+	//15 
+		function Page1(props) {
+			return(<>
+				<h2>Page 1</h2>
+			</>);
+		}
+		
+		function Page2 (props) {
+			return(<>
+				<h2>Page 2</h2>
+			</>);
+		}
+		
+		function Page3 (props) {
+			return(<>
+				<h2>Page 3</h2>
+			</>);
+		}
+		
+		function ToShowComponent (props) {
+			const [numComponent, setNumComponent] = React.useState(1);
+			let cs = [];
+			switch(numComponent) {
+					case 1: cs[0] = <Page1 key={numComponent}/>;
+					break;
+					case 2: cs[0] = <Page2 key={numComponent}/>;
+					break;
+					case 3: cs[0] = <Page3 key={numComponent}/>;
+					break;
+					case 4: cs[0] = <Page2 key={numComponent}/>; 
+					cs[1] = <Page3 key={numComponent+1}/>;
+					break;
+				}
+			return(<>
+				<button onClick={() => setNumComponent(1)}>Page 1</button>
+				<button onClick={() => setNumComponent(2)}>Page 2</button>
+				<button onClick={() => setNumComponent(3)}>Page 3</button>
+				<button onClick={() => setNumComponent(4)}>Pages 2 and 3</button>
+				{cs}	
+			</>);
+		}
+	//16
+		function WithHookUseEffect() {
+			const [count, setCount] = React.useState(0);
+			const [isStart, setIsStart] = React.useState(false);
+			React.useEffect(() => {
+				if(isStart) {
+					const timerId = setInterval(
+						() => console.log(count), 
+						1000
+					);
+					return () => {clearInterval(timerId);}
+				}
+			}, [isStart, count]);
+			
+			function handleStart() {
+				setIsStart(true);
+			}
+			
+			function handleClick() {
+				setCount(count+1);
+			}
+			
+			function handleEnd() {
+				setIsStart(false);
+			}
+			return (
+				<div>
+					<div>Hook useEffect</div>
+					<hr/>
+					<p>To see in console</p>
+					<p>You clicked {count} times</p>
+					<button onClick={handleStart}>Start</button>
+					<button onClick={handleClick}>Click</button>
+					<button onClick={handleEnd}>End</button>
+				</div>
+			);
+		}
 	/////////////////////////////////////////////////////////	
 	//HOC	
 		const container = (Example, numberOfExample) => {
@@ -768,6 +858,9 @@
 					{container(Calculator, 11)}
 					{container(SignUpDialog, 12)}
 					{container(MainFilterable, 13)}
+					{container(ClicksWithHookUseState, 14)}
+					{container(ToShowComponent, 15)}
+					{container(WithHookUseEffect, 16)}
 				</div>
 			)
 		}
