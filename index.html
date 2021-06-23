@@ -849,6 +849,31 @@
 			</>
 		);
 	}
+	//18
+		function TodoComponent () {
+			const [number, setNumber]  = React.useState(1);
+			const [massTodo, setMassTodo]  = React.useState([]);
+			const [toDo, setToDo]  = React.useState('');
+			function addedTodo() {
+				if(toDo.length > 0) {
+					setNumber(number + 1);
+					setMassTodo(massTodo.concat(<li key={number} style={{marginLeft: -21}}>{toDo}</li>));
+					setToDo('');
+				}	
+			}
+			return (
+				<>
+					<div>To-do list</div>
+					<hr/>
+					<ul>{massTodo}</ul>
+					<div>What you need to do?</div>
+					<input value={toDo} onChange={(e) => setToDo(e.target.value)}/>
+					<div style={{marginTop: 7}}>
+						<button onClick={addedTodo}>Added #{number}</button>
+					</div>
+				</>
+			);
+		}
 	/////////////////////////////////////////////////////////	
 	//HOC	
 		const container = (Example, numberOfExample) => {
@@ -881,6 +906,7 @@
 					{container(ToShowComponent, 15)}
 					{container(WithHookUseEffect, 16)}
 					{container(Timer, 17)}
+					{container(TodoComponent, 18)}
 				</div>
 			)
 		}
