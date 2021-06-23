@@ -830,6 +830,25 @@
 				</div>
 			);
 		}
+	//17
+	function Timer() {
+		const [sec, setSec] = React.useState(0);
+		React.useEffect(
+			() => {
+				const idTimer = setInterval(() => {
+					setSec(s => s + 1)
+				}, 1000);
+				return () => clearInterval(idTimer);
+			}
+		, []);
+		return (
+			<>
+				<div>Timer with hook</div>
+				<hr/>
+				<div>Seconds: {sec}</div>
+			</>
+		);
+	}
 	/////////////////////////////////////////////////////////	
 	//HOC	
 		const container = (Example, numberOfExample) => {
@@ -861,6 +880,7 @@
 					{container(ClicksWithHookUseState, 14)}
 					{container(ToShowComponent, 15)}
 					{container(WithHookUseEffect, 16)}
+					{container(Timer, 17)}
 				</div>
 			)
 		}
